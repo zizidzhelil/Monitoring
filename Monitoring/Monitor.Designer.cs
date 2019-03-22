@@ -1,6 +1,6 @@
-﻿namespace trackk
+﻿namespace Monitoring
 {
-    partial class f21
+    partial class Monitor
     {
         /// <summary>
         /// Required designer variable.

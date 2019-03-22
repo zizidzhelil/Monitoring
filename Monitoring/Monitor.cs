@@ -15,9 +15,9 @@ using System.Threading;
 using System.IO;
 
 
-namespace trackk
+namespace Monitoring
 {
-   public partial class f21 : Form
+   public partial class Monitor : Form
    {
       string d = "";
       private FilterInfoCollection videoDevices;
@@ -26,7 +26,7 @@ namespace trackk
       GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
       BlobCounter blobCounter = new BlobCounter();
       int range = 120;
-      public f21()
+      public Monitor()
       {
          InitializeComponent();
 

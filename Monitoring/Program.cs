@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace trackk
+namespace Monitoring
 {
     static class Program
     {
@@ -15,7 +15,7 @@ namespace trackk
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new f21());
+            Application.Run(new Monitor());
         }
     }
 }

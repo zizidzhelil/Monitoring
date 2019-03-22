@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace trackk.Properties
+namespace Monitoring.Properties
 {
 
 
