@@ -72,7 +72,6 @@ namespace Monitoring
          objectsImage.UnlockBits(objectsData);
 
          blobCounter.ProcessImage(grayImage);
-         Rectangle[] rects = blobCounter.GetObjectRectangles();
 
          image = mImage;
       }

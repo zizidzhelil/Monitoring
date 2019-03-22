@@ -1,33 +1,33 @@
 ﻿namespace Monitoring
 {
-    partial class Monitor
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+   partial class Monitor
+   {
+      /// <summary>
+      /// Required designer variable.
+      /// </summary>
+      private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+      /// <summary>
+      /// Clean up any resources being used.
+      /// </summary>
+      /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+      protected override void Dispose(bool disposing)
+      {
+         if (disposing && (components != null))
+         {
+            components.Dispose();
+         }
+         base.Dispose(disposing);
+      }
 
-        #region Windows Form Designer generated code
+      #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+      /// <summary>
+      /// Required method for Designer support - do not modify
+      /// the contents of this method with the code editor.
+      /// </summary>
+      private void InitializeComponent()
+      {
          this.videoSourcePlayer1 = new AForge.Controls.VideoSourcePlayer();
          this.camerasCombo = new System.Windows.Forms.ComboBox();
          this.button1 = new System.Windows.Forms.Button();
@@ -46,6 +46,7 @@
          this.videoSourcePlayer1.TabIndex = 3;
          this.videoSourcePlayer1.Text = "videoSourcePlayer1";
          this.videoSourcePlayer1.VideoSource = null;
+         this.videoSourcePlayer1.NewFrame += new AForge.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer1_NewFrame);
          // 
          // camerasCombo
          // 
@@ -119,17 +120,17 @@
          this.groupBox1.ResumeLayout(false);
          this.ResumeLayout(false);
 
-        }
+      }
 
-        #endregion
+      #endregion
 
-        private AForge.Controls.VideoSourcePlayer videoSourcePlayer1;
-        private System.Windows.Forms.ComboBox camerasCombo;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.ColorDialog colorDialog1;
-    }
+      private AForge.Controls.VideoSourcePlayer videoSourcePlayer1;
+      private System.Windows.Forms.ComboBox camerasCombo;
+      private System.Windows.Forms.Button button1;
+      private System.Windows.Forms.Button button2;
+      private System.Windows.Forms.GroupBox groupBox1;
+      private System.Windows.Forms.GroupBox groupBox3;
+      private System.Windows.Forms.ColorDialog colorDialog1;
+   }
 }
 
