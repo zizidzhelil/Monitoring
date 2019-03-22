@@ -72,6 +72,8 @@ namespace Monitoring
 
          if (!CompareImages(bitmapCompare, (Bitmap)image.Clone()))
          {
+            //TODO: Send email maybe here
+
             Debug.WriteLine($"{Guid.NewGuid().ToString()} THEY ARE DIFFERENT");
          }
          else
