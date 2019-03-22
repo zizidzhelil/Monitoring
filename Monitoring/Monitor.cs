@@ -53,14 +53,6 @@ namespace Monitoring
             camerasCombo.Items.Add("No local capture devices");
             videoDevices = null;
          }
-
-         Bitmap b = new Bitmap(320, 240);
-         Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
-         Graphics g2 = Graphics.FromImage(b);
-         pen1 = new Pen(Color.FromArgb(255, 0, 0), 3);
-         g2.Clear(Color.White);
-         g2.DrawLine(pen1, b.Width / 2, 0, b.Width / 2, b.Width);
-         g2.DrawLine(pen1, b.Width, b.Height / 2, 0, b.Height / 2);
       }
 
       private void videoSourcePlayer1_NewFrame(object sender, ref Bitmap image)
@@ -79,24 +71,8 @@ namespace Monitoring
          UnmanagedImage grayImage = grayscaleFilter.Apply(new UnmanagedImage(objectsData));
          objectsImage.UnlockBits(objectsData);
 
-
          blobCounter.ProcessImage(grayImage);
          Rectangle[] rects = blobCounter.GetObjectRectangles();
-
-         if (rects.Length > 0)
-         {
-
-            foreach (Rectangle objectRect in rects)
-            {
-               Graphics g = Graphics.FromImage(mImage);
-               using (Pen pen = new Pen(Color.FromArgb(160, 255, 160), 5))
-               {
-                  g.DrawRectangle(pen, objectRect);
-               }
-
-               g.Dispose();
-            }
-         }
 
          image = mImage;
       }
