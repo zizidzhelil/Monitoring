@@ -21,7 +21,7 @@ namespace Monitoring
    {
       private const int imageCompareReplacementCount = 10;
       private const float similarityThreshold = 0.5f;
-      private const float compareLevel = 0.95f;
+      private const float compareLevel = 0.98f;
       private FilterInfoCollection videoDevices;
       private EuclideanColorFiltering filter = new EuclideanColorFiltering();
       private Color color = Color.Black;
@@ -62,34 +62,16 @@ namespace Monitoring
 
       private void videoSourcePlayer1_NewFrame(object sender, ref Bitmap image)
       {
-         Bitmap objectsImage = null;
-         Bitmap mImage = null;
-         mImage = (Bitmap)image.Clone();
-         filter.CenterColor = Color.FromArgb(color.ToArgb());
-         filter.Radius = (short)range;
-
-         objectsImage = image;
-         filter.ApplyInPlace(objectsImage);
-
-         BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, image.Width, image.Height),
-         ImageLockMode.ReadOnly, image.PixelFormat);
-         UnmanagedImage grayImage = grayscaleFilter.Apply(new UnmanagedImage(objectsData));
-         objectsImage.UnlockBits(objectsData);
-
-         blobCounter.ProcessImage(grayImage);
-
-         image = mImage;
-
          frameCounterSinceLastUpdate++;
          if (bitmapCompare == null || frameCounterSinceLastUpdate % imageCompareReplacementCount == 0)
          {
             Debug.WriteLine($"{Guid.NewGuid().ToString()} VALUES CHANGED");
 
-            bitmapCompare = grayImage.ToManagedImage();
+            bitmapCompare = (Bitmap)image.Clone();
             return;
          }
 
-         if (!CompareImages(bitmapCompare, grayImage.ToManagedImage()))
+         if (!CompareImages(bitmapCompare, (Bitmap)image.Clone()))
          {
             Debug.WriteLine($"{Guid.NewGuid().ToString()} THEY ARE DIFFERENT");
          }
