@@ -27,7 +27,6 @@ namespace Monitoring
       private Color color = Color.Black;
       private GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
       private BlobCounter blobCounter = new BlobCounter();
-      private int range = 120;
       private Bitmap bitmapCompare;
       private int frameCounterSinceLastUpdate = 1;
 
