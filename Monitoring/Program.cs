@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Monitoring.View;
+using System;
 using System.Windows.Forms;
 
 namespace Monitoring
 {
-    static class Program
+   static class Program
     {
         [STAThread]
         static void Main()

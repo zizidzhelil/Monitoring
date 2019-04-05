@@ -61,15 +61,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Monitor.cs">
+    <Compile Include="View\IMonitorView.cs" />
+    <Compile Include="View\Monitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Monitor.Designer.cs">
+    <Compile Include="View\Monitor.Designer.cs">
       <DependentUpon>Monitor.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Monitor.resx">
+    <EmbeddedResource Include="View\Monitor.resx">
       <DependentUpon>Monitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

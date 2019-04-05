@@ -10,7 +10,7 @@ using System.Net;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace Monitoring
+namespace Monitoring.View
 {
     public partial class Monitor : Form
     {
@@ -185,5 +185,10 @@ namespace Monitoring
         {
 
         }
-    }
+
+      private void camerasCombo_SelectedIndexChanged(object sender, EventArgs e)
+      {
+
+      }
+   }
 }
