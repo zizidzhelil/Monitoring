@@ -7,25 +7,36 @@ namespace Monitoring.Processors
    public class ImageProcessor
    {
       private const float compareLevel = 0.98f;
+      private const int imageCompareReplacementCount = 10;
+
+      private int frameCounterSinceLastUpdate = 1;
+
+      public bool UpdateBitmapCompareIfNecessary(ref Bitmap bitmapCompare, Bitmap currentImage)
+      {
+         frameCounterSinceLastUpdate++;
+         if (bitmapCompare == null || frameCounterSinceLastUpdate % imageCompareReplacementCount == 0)
+         {
+            bitmapCompare = currentImage;
+            return true;
+         }
+
+         return false;
+      }
 
       public bool CompareImages(Bitmap imageOne, Bitmap imageTwo)
       {
          var newBitmap1 = ChangePixelFormat(new Bitmap(imageOne), PixelFormat.Format24bppRgb);
          var newBitmap2 = ChangePixelFormat(new Bitmap(imageTwo), PixelFormat.Format24bppRgb);
 
-         // Setup the AForge library
          var tm = new ExhaustiveTemplateMatching();
 
-         // Process the images
          var results = tm.ProcessImage(newBitmap1, newBitmap2);
 
-         // Compare the results, 0 indicates no match so return false
          if (results.Length <= 0)
          {
             return false;
          }
 
-         // Return true if similarity score is equal or greater than the comparison level
          return results[0].Similarity >= compareLevel;
       }
 

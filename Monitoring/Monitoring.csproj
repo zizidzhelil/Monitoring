@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComponentsLoader\CameraLoader.cs" />
+    <Compile Include="ComponentsLoader\VideoCaptureDeviceLoader.cs" />
     <Compile Include="Mail\MailSender.cs" />
     <Compile Include="Mail\MessageBuilder.cs" />
     <Compile Include="Presenter\MonitorPresenter.cs" />
