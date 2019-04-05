@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Presenter\MonitorPresenter.cs" />
     <Compile Include="View\IMonitorView.cs" />
     <Compile Include="View\Monitor.cs">
       <SubType>Form</SubType>

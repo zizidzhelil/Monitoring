@@ -1,12 +1,19 @@
 ﻿using AForge.Controls;
 using System.Collections.Generic;
+using static System.Windows.Forms.ComboBox;
 
-namespace trackk.View
+namespace Monitoring.View
 {
-   public class IMonitorView
+   public interface IMonitorView
    {
-      public IList<string> Cameras { get; set; }
+      ObjectCollection Cameras { get; }
 
-      public VideoSourcePlayer VideoPlayer { get; set; }
+      int SelectedCameraIndex { get; set; }
+
+      bool IsCameraControlActive { get; set; }
+
+      VideoSourcePlayer VideoPlayerControl { get; set; }
+
+      string LblInfoContent { get; set; }
    }
 }
