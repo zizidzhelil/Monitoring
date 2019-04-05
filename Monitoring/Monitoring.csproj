@@ -8,8 +8,8 @@
     <ProjectGuid>{589FD176-8FFF-4E0B-8F94-1377F23AB5C0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>trackk</RootNamespace>
-    <AssemblyName>trackk</AssemblyName>
+    <RootNamespace>Monitoring</RootNamespace>
+    <AssemblyName>Monitoring</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -61,6 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentsLoader\CameraLoader.cs" />
+    <Compile Include="Mail\MailSender.cs" />
+    <Compile Include="Mail\MessageBuilder.cs" />
     <Compile Include="Presenter\MonitorPresenter.cs" />
     <Compile Include="View\IMonitorView.cs" />
     <Compile Include="View\Monitor.cs">
@@ -82,6 +85,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -1,70 +1,51 @@
 ﻿using AForge.Imaging;
 using AForge.Imaging.Filters;
 using AForge.Video.DirectShow;
+using Monitoring.ComponentsLoader;
+using Monitoring.Mail;
 using Monitoring.View;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Net;
-using System.Net.Mail;
 using System.Windows.Forms;
 
 namespace Monitoring.Presenter
 {
    public class MonitorPresenter
    {
-      private Timer timer1;
+      private Timer startCountdown;
       private int counter = 3;
 
       private readonly IMonitorView _view;
+      private readonly MailSender _mailSender;
+      private readonly CameraNamesLoader _cameraNamesLoader;
+      private readonly FilterInfoCollection _videoDevices;
 
       private const int imageCompareReplacementCount = 10;
       private const float similarityThreshold = 0.5f;
       private const float compareLevel = 0.98f;
 
-      private readonly FilterInfoCollection videoDevices;
       private readonly EuclideanColorFiltering filter = new EuclideanColorFiltering();
       private readonly Color color = Color.Black;
       private readonly GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
-      private readonly BlobCounter blobCounter = new BlobCounter();
 
       private Bitmap bitmapCompare;
       private int frameCounterSinceLastUpdate = 1;
 
       public MonitorPresenter(IMonitorView view)
       {
-         this._view = view;
-
-         blobCounter.MinWidth = 2;
-         blobCounter.MinHeight = 2;
-         blobCounter.FilterBlobs = true;
-         blobCounter.ObjectsOrder = ObjectsOrder.Size;
-
-         try
-         {
-            videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-
-            if (videoDevices.Count == 0)
-               throw new ApplicationException();
-
-            foreach (FilterInfo device in videoDevices)
-            {
-               _view.Cameras.Add(device.Name);
-            }
-
-            _view.SelectedCameraIndex = 0;
-         }
-         catch
-         {
-            _view.Cameras.Add("No local capture devices");
-            videoDevices = null;
-         }
+         _videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+         _view = view;
+         _mailSender = new MailSender();
+         _cameraNamesLoader = new CameraNamesLoader(_videoDevices);
+         _view.Cameras.AddRange(_cameraNamesLoader.Load());
+         _view.SelectedCameraIndex = 0;
       }
 
       public void OnNewFrame(ref Bitmap image)
       {
+         var clonedImage = (Bitmap)image.Clone();
          frameCounterSinceLastUpdate++;
          if (bitmapCompare == null || frameCounterSinceLastUpdate % imageCompareReplacementCount == 0)
          {
@@ -76,38 +57,7 @@ namespace Monitoring.Presenter
 
          if (!CompareImages(bitmapCompare, (Bitmap)image.Clone()))
          {
-            try
-            {
-               MailMessage mail = new MailMessage();
-
-               mail.From = new MailAddress("zeni.dzhelil97@gmail.com");
-               mail.To.Add("zizidzhelil@gmail.com");
-               mail.Subject = "Внимание!";
-               mail.Body = "Засечено е движение!";
-
-               SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com", 587)
-               {
-                  EnableSsl = true,
-                  Credentials = new NetworkCredential("zeni.dzhelil97@gmail.com", "a123b456c")
-               };
-
-               using (var memoryStream = new MemoryStream())
-               {
-                  image.Save("image.png", ImageFormat.Png);
-
-                  var imageAttachment = (Bitmap)image.Clone();
-                  imageAttachment.Save(memoryStream, ImageFormat.Jpeg);
-                  memoryStream.Position = 0;
-                  var attachment = new Attachment(memoryStream, "image.jpeg");
-                  mail.Attachments.Add(attachment);
-
-                  SmtpServer.Send(mail);
-               }
-            }
-            catch (Exception ex)
-            {
-               MessageBox.Show(ex.ToString());
-            }
+            _mailSender.Send(clonedImage);
 
             Debug.WriteLine($"{Guid.NewGuid().ToString()} THEY ARE DIFFERENT");
          }
@@ -119,10 +69,10 @@ namespace Monitoring.Presenter
 
       public void OnBtnStartClick()
       {
-         timer1 = new Timer();
-         timer1.Tick += new EventHandler(Timer_Tick);
-         timer1.Interval = 1000; // 1 second
-         timer1.Start();
+         startCountdown = new Timer();
+         startCountdown.Tick += new EventHandler(Timer_Tick);
+         startCountdown.Interval = 1000; // 1 second
+         startCountdown.Start();
 
          _view.LblInfoContent = counter.ToString();
       }
@@ -145,12 +95,12 @@ namespace Monitoring.Presenter
          counter--;
          if (counter == 0)
          {
-            timer1.Stop();
+            startCountdown.Stop();
 
             _view.VideoPlayerControl.SignalToStop();
             _view.VideoPlayerControl.WaitForStop();
 
-            VideoCaptureDevice videoSource = new VideoCaptureDevice(videoDevices[_view.SelectedCameraIndex].MonikerString)
+            VideoCaptureDevice videoSource = new VideoCaptureDevice(_videoDevices[_view.SelectedCameraIndex].MonikerString)
             {
                DesiredFrameSize = new Size(320, 240),
                DesiredFrameRate = 2
