@@ -53,11 +53,6 @@ namespace Monitoring.View
       {
          InitializeComponent();
 
-         this.Load += Monitor_Load;
-      }
-
-      private void Monitor_Load(object sender, EventArgs e)
-      {
          _presenter = new MonitorPresenter(this);
       }
 
