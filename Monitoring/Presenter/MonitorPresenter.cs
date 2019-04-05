@@ -11,8 +11,7 @@ namespace Monitoring.Presenter
 {
    public class MonitorPresenter
    {
-      private Timer startCountdown;
-      private int counter = 3;
+      private const int InitialWaitTime = 3;
 
       private readonly IMonitorView _view;
       private readonly MailSender _mailSender;
@@ -21,6 +20,8 @@ namespace Monitoring.Presenter
       private readonly FilterInfoCollection _videoDevices;
       private readonly ImageProcessor _imageProcessor;
 
+      private Timer startCountdown;
+      private int counter = InitialWaitTime;
       private Bitmap bitmapCompare;
 
       public MonitorPresenter(IMonitorView view)
@@ -60,6 +61,8 @@ namespace Monitoring.Presenter
       {
          _view.VideoPlayerControl.SignalToStop();
          _view.VideoPlayerControl.WaitForStop();
+
+         counter = InitialWaitTime;
       }
 
       public void OnMonitoringFormClosing()
