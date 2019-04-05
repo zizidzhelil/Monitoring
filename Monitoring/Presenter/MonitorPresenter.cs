@@ -1,13 +1,12 @@
-﻿using AForge.Imaging;
-using AForge.Imaging.Filters;
+﻿using AForge.Imaging.Filters;
 using AForge.Video.DirectShow;
 using Monitoring.ComponentsLoader;
 using Monitoring.Mail;
+using Monitoring.Processors;
 using Monitoring.View;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace Monitoring.Presenter
@@ -21,10 +20,11 @@ namespace Monitoring.Presenter
       private readonly MailSender _mailSender;
       private readonly CameraNamesLoader _cameraNamesLoader;
       private readonly FilterInfoCollection _videoDevices;
+      private readonly ImageProcessor _imageProcessor;
 
       private const int imageCompareReplacementCount = 10;
       private const float similarityThreshold = 0.5f;
-      private const float compareLevel = 0.98f;
+
 
       private readonly EuclideanColorFiltering filter = new EuclideanColorFiltering();
       private readonly Color color = Color.Black;
@@ -41,6 +41,7 @@ namespace Monitoring.Presenter
          _cameraNamesLoader = new CameraNamesLoader(_videoDevices);
          _view.Cameras.AddRange(_cameraNamesLoader.Load());
          _view.SelectedCameraIndex = 0;
+         _imageProcessor = new ImageProcessor();
       }
 
       public void OnNewFrame(ref Bitmap image)
@@ -55,7 +56,7 @@ namespace Monitoring.Presenter
             return;
          }
 
-         if (!CompareImages(bitmapCompare, (Bitmap)image.Clone()))
+         if (!_imageProcessor.CompareImages(bitmapCompare, (Bitmap)image.Clone()))
          {
             _mailSender.Send(clonedImage);
 
@@ -111,32 +112,6 @@ namespace Monitoring.Presenter
          }
 
          _view.LblInfoContent = counter.ToString();
-      }
-
-      private Boolean CompareImages(Bitmap imageOne, Bitmap imageTwo)
-      {
-         var newBitmap1 = ChangePixelFormat(new Bitmap(imageOne), PixelFormat.Format24bppRgb);
-         var newBitmap2 = ChangePixelFormat(new Bitmap(imageTwo), PixelFormat.Format24bppRgb);
-
-         // Setup the AForge library
-         var tm = new ExhaustiveTemplateMatching();
-
-         // Process the images
-         var results = tm.ProcessImage(newBitmap1, newBitmap2);
-
-         // Compare the results, 0 indicates no match so return false
-         if (results.Length <= 0)
-         {
-            return false;
-         }
-
-         // Return true if similarity score is equal or greater than the comparison level
-         return results[0].Similarity >= compareLevel;
-      }
-
-      private Bitmap ChangePixelFormat(Bitmap inputImage, PixelFormat newFormat)
-      {
-         return inputImage.Clone(new Rectangle(0, 0, inputImage.Width, inputImage.Height), newFormat);
       }
    }
 }

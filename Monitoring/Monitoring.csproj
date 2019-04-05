@@ -65,6 +65,7 @@
     <Compile Include="Mail\MailSender.cs" />
     <Compile Include="Mail\MessageBuilder.cs" />
     <Compile Include="Presenter\MonitorPresenter.cs" />
+    <Compile Include="Processors\ImageProcessor.cs" />
     <Compile Include="View\IMonitorView.cs" />
     <Compile Include="View\Monitor.cs">
       <SubType>Form</SubType>
